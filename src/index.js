@@ -17,23 +17,23 @@ defaultModules.set(PNotifyMobile, {});
 // refs
 const formInputRef = document.getElementById('search-form');
 const galleryListRef = document.getElementById('gallery-list');
-// const loadMoreBtn = document.getElementById('my-element-selector');
+const loadMoreBtnRef = document.getElementById('my-element-selector');
 
+// instances
 const imagesApiService = new ImagesApiService();
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: true,
 });
-// loadMoreBtn.refs.button.scrollIntoView({
-//   behavior: 'smooth',
-//   block: 'end',
-// });
-let endPoint = 0;
+
+loadMoreBtnRef.scrollIntoView({
+  behavior: 'smooth',
+  block: 'end',
+});
 
 function setError(data) {
   const now = new Date().valueOf();
-  console.log(now - endPoint);
-  console.log(now);
+  let endPoint = 0;
 
   if (now > endPoint) {
     endPoint = now + data.delay + 1000;
@@ -47,9 +47,6 @@ function onSearch(e) {
   imagesApiService.query = e.currentTarget.elements.query.value;
 
   if (!imagesApiService.query.trim()) {
-    //при пробеле идет фетч, почему?
-    // Запрос не должен отправляться при пустой строке ввода (или если просто использует пробел)
-
     return setError({
       title: `Please enter some value!`,
       delay: 500,
@@ -62,69 +59,67 @@ function onSearch(e) {
   // }
 
   imagesApiService.resetPage();
+  fetchImages();
   clearImagesContainer();
-  fetchImagesFn();
 }
 formInputRef.addEventListener('submit', onSearch);
 
-function fetchImagesFn() {
+function fetchImages() {
   loadMoreBtn.disable();
-  imagesApiService.fetchImages().then(hits => {
+  imagesApiService.fetchPictures().then(hits => {
     renderImagesMarkup(hits);
     loadMoreBtn.enable();
+    formInputRef.reset();
   });
 }
-loadMoreBtn.refs.button.addEventListener('click', fetchImagesFn);
+loadMoreBtn.refs.button.addEventListener('click', fetchImages);
 
 function renderImagesMarkup(hits) {
-  // galleryListRef.insertAdjacentHTML('beforeend', imageCardTpl(hits));
+  galleryListRef.insertAdjacentHTML('beforeend', imageCardTpl(hits));
 
-  const markup = hits.reduce((acc, item) => {
-    const el = `<li class='gallery-item'>
-    <div class='photo-card'>
+  // const markup = hits.reduce((acc, item) => {
+  //   const el = `<li class='gallery-item'>
+  //   <div class='photo-card'>
 
-      <div class='gallery-image-box'>
-        <img class='gallery-image' src='${item.webformatURL}' alt='${item.tags}' />
-      </div>
+  //     <div class='gallery-image-box'>
+  //       <img class='gallery-image' src='${item.webformatURL}' alt='${item.tags}' />
+  //     </div>
 
-      <div class='stats'>
+  //     <div class='stats'>
 
-        <p class='stats-item'>
-          <i class='material-icons'>thumb_up</i>
-          ${item.likes}
-        </p>
+  //       <p class='stats-item'>
+  //         <i class='material-icons'>thumb_up</i>
+  //         ${item.likes}
+  //       </p>
 
-        <p class='stats-item'>
-          <i class='material-icons'>visibility</i>
-          ${item.views}
-        </p>
+  //       <p class='stats-item'>
+  //         <i class='material-icons'>visibility</i>
+  //         ${item.views}
+  //       </p>
 
-        <p class='stats-item'>
-          <i class='material-icons'>comment</i>
-          ${item.comments}
-        </p>
+  //       <p class='stats-item'>
+  //         <i class='material-icons'>comment</i>
+  //         ${item.comments}
+  //       </p>
 
-        <p class='stats-item'>
-          <i class='material-icons'>cloud_download</i>
-          ${item.downloads}
-        </p>
+  //       <p class='stats-item'>
+  //         <i class='material-icons'>cloud_download</i>
+  //         ${item.downloads}
+  //       </p>
 
-      </div>
-    </div>
-  </li>`;
+  //     </div>
+  //   </div>
+  // </li>`;
 
-    return `${acc} ${el}`;
-  }, '');
+  //   return `${acc} ${el}`;
+  // }, '');
 
-  galleryListRef.innerHTML = markup;
+  // galleryListRef.insertAdjacentHTML('beforeend', markup);
 }
 
 function clearImagesContainer() {
   galleryListRef.innerHTML = '';
 }
-
-// --------------------------------------------------------------------------------
-// Для того чтобы корректно работал плавный скролл необходимо зафиксировать высоту карточки.
 // --------------------------------------------------------------------------------
 // async function fn () {}
 

@@ -14,11 +14,14 @@ export default class ImagesApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    // this.base_url = 'https://pixabay.com/api/';
+    // this.key = '22935349-f238c1b9d1a1a29229f76f105';
   }
 
-  fetchImages() {
+  fetchPictures() {
     return fetch(
       `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`
+      // `${this.base_url}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${this.key}`
     )
       .then(response => response.json())
       .then(({ hits }) => {
