@@ -34,9 +34,21 @@
         />
       </form>
 
-      <div id="gallery-box">
-        <ul class="gallery-list" id="gallery-list"></ul>
-      </div>
+      <ul class="gallery-list" id="gallery-list"></ul>
+
+      <button
+        type="button"
+        class="button"
+        id="my-element-selector"
+        data-action="load-more"
+      >
+        <span
+          class="spinner-border spinner-border-sm spinner is-hidden"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        <span class="label">Load more</span>
+      </button>
     </div>
 
     <script src="./index.js"></script>
