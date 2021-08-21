@@ -66,7 +66,7 @@ function fetchImages() {
   loadMoreBtn.disable();
   imagesApiService.fetchPictures().then(hits => {
     renderImagesMarkup(hits);
-    scrollImages();
+    // scrollImages();
     loadMoreBtn.enable();
     formInputRef.reset();
   });
@@ -141,7 +141,25 @@ function showModal(image) {
   instance.show();
   console.log('click');
 }
-// galleryListRef.addEventListener('click', showModal);
+
+function addModalWindow(event) {
+  const targetImg = event.target.currentSrc;
+
+  if (targetImg) {
+    let biggerImage = null;
+
+    imagesApiService.map(item => {
+      console.log(item);
+
+      // if (item.previewURL === targetImg) {
+      //   biggerImage = item.largeImageURL;
+      // }
+    });
+
+    showModal(biggerImage);
+  }
+}
+galleryListRef.addEventListener('click', addModalWindow);
 
 // --------------------------------------------------------------------------------
 // async function fn () {}
