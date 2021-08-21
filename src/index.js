@@ -14,6 +14,9 @@ import '@pnotify/core/dist/BrightTheme.css'; //color theme for error
 
 defaultModules.set(PNotifyMobile, {});
 
+// basicLightbox
+import * as basicLightbox from 'basiclightbox';
+
 // refs
 const formInputRef = document.getElementById('search-form');
 const galleryListRef = document.getElementById('gallery-list');
@@ -24,11 +27,6 @@ const imagesApiService = new ImagesApiService();
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: true,
-});
-
-loadMoreBtnRef.scrollIntoView({
-  behavior: 'smooth',
-  block: 'end',
 });
 
 function setError(data) {
@@ -54,7 +52,7 @@ function onSearch(e) {
   }
 
   // if () {
-  // Кнопку "Load more" не нужно показывать когда картинок меньше или 12, а также когда картинки закончились
+  // Кнопку не показывать когда картинки закончились
   loadMoreBtn.show();
   // }
 
@@ -68,11 +66,17 @@ function fetchImages() {
   loadMoreBtn.disable();
   imagesApiService.fetchPictures().then(hits => {
     renderImagesMarkup(hits);
+    scrollImages();
     loadMoreBtn.enable();
     formInputRef.reset();
   });
 }
 loadMoreBtn.refs.button.addEventListener('click', fetchImages);
+
+function allImages(totalHits) {
+  // показывать лоад мор по условию, считаю сколько хитс всего имеет картинок
+  // console.log({ totalHits });
+}
 
 function renderImagesMarkup(hits) {
   galleryListRef.insertAdjacentHTML('beforeend', imageCardTpl(hits));
@@ -120,6 +124,25 @@ function renderImagesMarkup(hits) {
 function clearImagesContainer() {
   galleryListRef.innerHTML = '';
 }
+
+function scrollImages() {
+  loadMoreBtnRef.scrollIntoView({
+    behavior: 'smooth',
+    block: 'end',
+  });
+}
+
+function showModal(image) {
+  const instance = basicLightbox.create(`
+    <div class="modal">
+        <img class="gallery-image" src=${image} width="800" height="600">
+    </div>
+    `);
+  instance.show();
+  console.log('click');
+}
+// galleryListRef.addEventListener('click', showModal);
+
 // --------------------------------------------------------------------------------
 // async function fn () {}
 
