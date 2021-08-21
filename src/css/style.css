@@ -111,14 +111,14 @@ ul {
   overflow: hidden;
 }
 
-.gallery-image {
+.gallery-image-preview {
   /* height: 100%; */
   background-size: cover;
   overflow: hidden;
   height: 250px;
   width: 350px;
 }
-.gallery-image:hover {
+.gallery-image-preview:hover {
   /* transform: scale(1.4); */
   border-radius: 4px;
 }
