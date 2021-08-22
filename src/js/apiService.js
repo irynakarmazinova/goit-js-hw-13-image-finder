@@ -2,6 +2,10 @@
 
 import { BASE_URL, API_KEY } from './constants';
 
+import axios from 'axios';
+axios.defaults.baseURL =
+  'https://pixabay.com/api/?image_type=photo&orientation=horizontal';
+
 // export default function fetchImage(search) {
 //   return fetch(
 //     `${BASE_URL}?image_type=photo&orientation=horizontal&q=${search}&page=1&per_page=12&key=${API_KEY}`
@@ -15,19 +19,21 @@ export default class ImagesApiService {
     this.searchQuery = '';
     this.page = 1;
     // this.base_url = 'https://pixabay.com/api/';
-    // this.key = '22935349-f238c1b9d1a1a29229f76f105';
+    this.key = '22935349-f238c1b9d1a1a29229f76f105';
   }
 
-  fetchPictures() {
-    return fetch(
-      `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`
-      // `${this.base_url}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${this.key}`
-    )
-      .then(response => response.json())
-      .then(({ hits }) => {
-        this.incrementPage();
-        return hits;
-      });
+  async fetchPictures() {
+    const url = `&q=${this.query}&page=${this.page}&per_page=12&key=${this.key}`;
+    // `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
+
+    const {
+      data: { hits },
+    } = await axios.get(url);
+    return hits;
+
+    // return fetch(url)
+    //   .then(response => response.json())
+    //   .then(data => data.hits);
   }
 
   incrementPage() {
