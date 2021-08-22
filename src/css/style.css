@@ -95,7 +95,7 @@ ul {
 .gallery-item {
   display: flex;
   /* width: 400px; */
-  flex-basis: calc(100% / 4 - 20px);
+  flex-basis: calc(100% / 3 - 20px);
   margin-right: 20px;
   margin-bottom: 20px;
 }
@@ -103,7 +103,7 @@ ul {
 .photo-card {
   display: flex;
   flex-direction: column;
-  height: 200px;
+  height: 300px;
   border: 1px solid #eee;
 }
 
@@ -112,11 +112,10 @@ ul {
 }
 
 .gallery-image-preview {
-  /* height: 100%; */
   background-size: cover;
   overflow: hidden;
-  height: 150px;
-  width: 250px;
+  height: 250px;
+  width: 380px;
 }
 .gallery-image-preview:hover {
   /* transform: scale(1.4); */
@@ -138,9 +137,6 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* width: 10px;
-  height: 10px; */
 
   color: #2196f3;
 }

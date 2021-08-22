@@ -1,5 +1,5 @@
 import ImagesApiService from './apiService';
-// import LoadMoreBtn from './load-more-btn';
+import LoadMoreBtn from './load-more-btn';
 
 // handlebars
 import imageCardTpl from '../templates/image-card.hbs';
@@ -25,10 +25,10 @@ const loadMoreBtnRef = document.getElementById('my-element-selector');
 
 // instances
 const imagesApiService = new ImagesApiService();
-// const loadMoreBtn = new LoadMoreBtn({
-//   selector: '[data-action="load-more"]',
-//   hidden: true,
-// });
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
 
 // IntersectionObserver
 const options = {
@@ -50,14 +50,7 @@ function setError(data) {
 
 async function onSearch(e) {
   e.preventDefault();
-
-  //   imagesApiService.query = e.currentTarget.elements.query.value;
-  //   if (!imagesApiService.query.trim()) {
-  //     return setError({
-  //       title: `Please enter some value!`,
-  //       delay: 500,
-  //     });
-  //     }
+  clearImagesContainer();
 
   const value = e.target.elements.query.value.trim();
   if (value === '') {
@@ -66,35 +59,30 @@ async function onSearch(e) {
       delay: 500,
     });
   }
-
-  // if () {
-  // Кнопку не показывать когда картинки закончились
-  //   loadMoreBtn.show();
-  // }
-
-  clearImagesContainer();
-
   imagesApiService.query = value;
   const data = await imagesApiService.fetchPictures();
   renderImagesMarkup(data);
 
+  // if () {
+  // Кнопку не показывать когда картинки закончились
+  loadMoreBtn.show();
+  // }
+
+  fetchImages();
   imagesApiService.resetPage();
 }
 formInputRef.addEventListener('submit', onSearch);
 
-// function fetchImages() {
-//   loadMoreBtn.disable();
-//   imagesApiService.fetchPictures().then(hits => {
-//     renderImagesMarkup(hits);
-//     loadMoreBtn.enable();
-//     formInputRef.reset();
+function fetchImages() {
+  loadMoreBtn.disable();
+  imagesApiService.fetchPictures().then(hits => {
+    // renderImagesMarkup(hits);
+    loadMoreBtn.enable();
+    formInputRef.reset();
 
-//     //   не должно скролиться к кнопке лоад мор при первой загрузки картинок. потом скролить нужно каждый раз при клике на лоад мор к кнопке
-//     if (hits.length > 10) {
-//       scrollImages();
-//     }
-//   });
-// }
+    //   не должно скролиться к кнопке лоад мор при первой загрузки картинок. потом скролить нужно каждый раз при клике на лоад мор к кнопке
+  });
+}
 
 function renderImagesMarkup(hits) {
   galleryListRef.insertAdjacentHTML('beforeend', imageCardTpl(hits));
